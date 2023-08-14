@@ -1,11 +1,11 @@
-import Dropdownsample from "./Dropdownsample";
+import Dropdownsample from "./Dropdownsample.jsx";
 
 function App() {
   return (
-    <div className="App">
-      <h1>React study</h1>
-      <h2>Dropdown</h2>
-        <Dropdownsample/>
+    <div className="App flex flex-col justify-center items-center h-screen w-screen">
+      <h1 className="text-6xl">React study</h1>
+      <div className="text-3xl font-light">#Dropdown</div>
+      <Dropdownsample />
     </div>
   );
 }
