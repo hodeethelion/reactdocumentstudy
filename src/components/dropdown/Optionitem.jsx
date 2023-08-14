@@ -7,9 +7,9 @@ const Optionitem = ({value, label, changeOption, changeDetailShow}) => {
     changeDetailShow(0);
   }
   return (
-    <div onClick={changingOption}>
+    <button onClick={changingOption} className='font-thin block'>
       {label}
-    </div>
+    </button>
   );
 };
 
