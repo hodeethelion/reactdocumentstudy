@@ -1,9 +1,15 @@
-import React from 'react';
+import React from "react";
+import Optionitem from "./Optionitem";
 
-const Dropdown = () => {
+const Dropdown = ({ options }) => {
+  console.log(options)
+
   return (
     <div>
-      dropdown
+      {/* input이랑 버튼 */}
+      {options.map((elem) => (
+        <Optionitem key={elem.value}  value={elem.value} label={elem.label} />
+      ))}
     </div>
   );
 };
