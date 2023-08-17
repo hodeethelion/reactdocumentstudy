@@ -1,9 +1,10 @@
-import React from 'react';
+import React from "react";
+import Board from "./components/ticktactoe/Board";
 
 const Ticktacktoesample = () => {
   return (
     <div>
-      ticktacktoe
+      <Board/>
     </div>
   );
 };
