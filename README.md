@@ -73,3 +73,90 @@ map function은 element를 어떠한 형식으로 바꿔줘야 할 지를 고민
 {options.map(elem => <Optionitem key={elem.value} value={elem.value} label={elem.label}/>)}
 ```
 이렇게 고쳤더니 더 이상 warning이 생기지 않았다. 아무래도 리스트로 만들었을 때 key값을 고유하게 만들어 주어야하나 보다.
+
+## Tictactoe 게임 제작하기 (2023.08.16~17)
+
+[React 공식 문서 출처](https://react.dev/learn/tutorial-tic-tac-toe) 
+
+> Tic Tac Toe를 제작해보며 리액트의 기본적인 구조 자체를 이해하는 것이다. 화이팅해봅시당. 기초적인 것을 좀 더 잘 알아보도록 합시다.
+
+### React에서 함수 컴포넌트의 구조는?
+보통 함수 컴포넌트를 만들어서 페이지 구성요소를 만드는 것이다. 혹은 다른 컴포넌트의 조각이 될 수 있다.
+
+```javascript
+const Square = () => {
+  return (
+    <button className='square border'>X</button>
+  );
+};
+export default Square;
+```
+다음과 같이 형성 할 수 있는데, 
+- export: 다른 파일에서 이를 사용할 수 있도록 exporting 해주는 것이다
+- export default: 해당 모듈엔 하나의 개체만 있다는 것을 의미하는 것이다.
+
+만약에 한 파일에 여러개의 조각들을 export 할 수 있도록 만든다면, `export`을 쓰고 단일이면 왠만하면 `export default`를 쓰는 것이 좋을 것 같다.
+
+### 현재 square은 'X'만 써져있다! 이를 params로 내려줄 수 있다면?
+```javascript
+import React from 'react';
+
+const Square = ({input}) => {
+  return (
+    <button className='square border'>{input}</button>
+  );
+};
+
+export default Square;
+```
+다음과 같이 안에 input이 들어갈 수 있도록 만들 수 있겠다! object까지 쓰고 싶지 않으니
+```javascript
+<Square input="3" />
+```
+다음과 같이 사용한다면 input에 원하는 O 혹은 X를 집어 넣을 수도 있겠다.
+
+### CSS 문제? 박스가 채워질 때, 박스간 간격이 달라진다, 해결 방법은?
+```javascript
+const [value, setValue] = useState('');
+  const handleClick = () => {
+    console.log("click!");
+    setValue('X')
+  };
+```
+Square이라는 컴포넌트 내부에 value가 처음에 아예 존재하지 않다가, 누르면 이제 valued를 'X'로 채워준다. 근데 이렇게 되면 
+```javascript
+ <div className="board-row mt-0">
+  <Square />
+  <Square />
+  <Square />
+</div>
+<div className="board-row">
+  <Square />
+  <Square />
+  <Square />
+</div>
+```
+`board-row`간의 간격이 달라진다 이를 어떻게 하면 해결할 수 있을까? 
+
+- 시도1: 먼저 간격을 일부러 고정해보도록하자. mt-0, mb-0과 같이 했더니 잘 안된다.
+- 시도2: flex를 사용해보자, 즉 한 줄 한 줄 row에 대한 flex를 사용해보자.
+```javascript
+ <div className="board-row flex">
+  <Square />
+  <Square />
+  <Square />
+</div>
+<div className="board-row flex">
+  <Square />
+  <Square />
+  <Square />
+</div>
+```
+이렇게 한 줄에 대한 flex를 사용해보았더니 성공!
+
+### Flex는 무엇인가?
+이것은 좀 집중해서 나중에 더 보도록 하자... 
+
+
+### 자 그렇다면 몇번째 row와 col의 Button을 누른지 저장하려면 어떻게 해야할 까?
+부모 컴포턴트인 `Board`에서 이를 관리할 수 있도록 해보자.
