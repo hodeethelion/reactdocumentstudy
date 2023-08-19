@@ -73,3 +73,42 @@ map function은 element를 어떠한 형식으로 바꿔줘야 할 지를 고민
 {options.map(elem => <Optionitem key={elem.value} value={elem.value} label={elem.label}/>)}
 ```
 이렇게 고쳤더니 더 이상 warning이 생기지 않았다. 아무래도 리스트로 만들었을 때 key값을 고유하게 만들어 주어야하나 보다.
+
+### 컴포넌트 간에 props로 함수를 내려줄 수도 있는거야? 
+Board라는 더 큰 컴포넌트에서 작은 컴포넌트를 관리해야한다. 그렇다면 함수를 square에서 만들어서 다시 올리는 것은 조금 미련한 짓! 자, 그럼 아무래도 컴포넌트 간 함수를 내려주는 방법을 사용해서 관리하는 것이다! 
+
+```javascript
+ <Square value={squares[0]} id={0} onSquareClick={handleClick}/>
+```
+이 처럼 square을 만들어서 handleclick이라는 함수를 내려주는 것이다.
+Board라는 컴포넌트에서 다음과 같은 세팅을 해주면! 
+```javascript
+  const [squares, setSquares] = useState(Array(9).fill(null))
+  console.log('Board: ', squares)
+
+  const handleClick = () => {
+    // 복사하기
+    const nextSquares = squares.slice();
+    console.log(nextSquares);
+    nextSquares[0] = 'X';
+    setSquares(nextSquares)
+  }
+```
+자식 컴포넌트에서 부모의 함수를 사용하며, 부모에 있는 useState에 해당하는 함수를 사용할 수 있다.
+
+### 에러 발생: Too many re-renders. React limits the number of renders to prevent an infinite loop.
+
+```javascript 
+<Square value={squares[0]} id={0} onSquareClick={handleClick(0)}/>
+```
+다음과 같이 square를 세팅하면, 보드 컴포넌트 자체에서 렌더링을 할때, 바꾸게 된다 그러면 setSquare라는 useState의 함수를 부르게 되어서 다시 렌더링을 하게 되는 것! 함수를 사용하면서 props로 내려주면 이러한 문제가 생기는 것이다
+
+```javascript
+<Square value={squares[0]} id={0} onSquareClick={()=> handleClick(0)}/>
+```
+다음과 같이 화살표 함수를 사용한다면, 클릭 했을 때 불러올 수 있도록 해줄 수 있다. 결과적으로 정리를 해보자.
+1. click하면 square에서 onclick prop으로 받은 함수를 실행.
+2. handleClick이 0이라는 argument를 받아서 처음 square 리스트를 바꿔줌. 
+3. Board라는 컴포넌트가 교체됨. 그래서 board는 전체적인 모든 자식들을 다시 rerender 시켜줌. -> 이때 화면상으로 바뀜.
+
+불변성때문에 `.slice()`를 해줘야한다. 복사본을 만들고 다시 세팅해주는 것이 리액트의 기초라고 할 수 있다.

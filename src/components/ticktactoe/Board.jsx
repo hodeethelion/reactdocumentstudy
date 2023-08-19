@@ -5,15 +5,20 @@ const Board = () => {
   const [squares, setSquares] = useState(Array(9).fill(null))
   console.log('Board: ', squares)
 
-  const handleClick = () => {
-    console.log('1')
+  const handleClick = (i) => {
+    // 복사하기
+    const nextSquares = squares.slice();
+    console.log(nextSquares);
+    nextSquares[i] = 'X';
+    setSquares(nextSquares)
+    console.log('square changing into', squares)
   }
 
   return (
     <div>
       <div>
         <div className="board-row flex">
-          <Square value={squares[0]} id={0} onSquareClick={handleClick}/>
+          <Square value={squares[0]} id={0} onSquareClick={()=> handleClick(0)}/>
           <Square value={squares[1]} id={1}/>
           <Square value={squares[2]} id={2}/>
         </div>

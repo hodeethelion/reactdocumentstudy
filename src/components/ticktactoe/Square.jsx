@@ -1,11 +1,6 @@
 import {useState} from "react";
 
 const Square = ({value, id, onSquareClick}) => {
-  
-  const handleClick = () => {
-    console.log("click!");
-    console.log(id);
-  };
 
   return (
     <button
